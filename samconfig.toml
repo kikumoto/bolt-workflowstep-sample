@@ -1,0 +1,10 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "bolt-workflowstep-sample"
+s3_bucket = "YOU MUST SET S3 BUCKET"
+s3_prefix = "bolt-workflowstep-sample"
+region = "ap-northeast-1"
+capabilities = "CAPABILITY_IAM"
+image_repositories = []

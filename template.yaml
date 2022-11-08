@@ -1,0 +1,48 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  bolt-workflowstep-sample
+
+Globals:
+  Function:
+    Timeout: 10
+
+Resources:
+  BoltWorkflowstepSampleFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: BoltWorkflowstepSampleFunction
+      CodeUri: app/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      Policies:
+        - Version: 2012-10-17
+          Statement:
+            - Sid: SSMParameterStoreSAccess
+              Effect: Allow
+              Action:
+                - ssm:GetParameter
+              Resource:
+                - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/slackapp/bolt-workflowstep-sample/*
+            - Sid: InvokeSelf
+              Effect: Allow
+              Action:
+                - lambda:InvokeFunction
+                - lambda:GetFunction
+              Resource:
+                - !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:BoltWorkflowstepSampleFunction
+      FunctionUrlConfig:
+        AuthType: NONE
+
+Outputs:
+  BoltWorkflowstepSampleFunction:
+    Description: "Lambda Function ARN"
+    Value: !GetAtt BoltWorkflowstepSampleFunction.Arn
+  BoltWorkflowstepSampleFunctionIamRole:
+    Description: "Implicit IAM Role created for function"
+    Value: !GetAtt BoltWorkflowstepSampleFunctionRole.Arn
+  BoltWorkflowstepSampleFunctionUrl:
+    Description: "Function URLs endpoint"
+    Value: !GetAtt BoltWorkflowstepSampleFunctionUrl.FunctionUrl
